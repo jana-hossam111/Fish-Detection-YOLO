@@ -1,6 +1,7 @@
 import streamlit as st
 from ultralytics import YOLO
 from PIL import Image
+import numpy as np
 
 st.set_page_config(page_title="Fish Detection")
 
@@ -8,6 +9,12 @@ st.title("🐟 Fish Detection using YOLOv8")
 st.write("Upload an image to detect fish.")
 
 model = YOLO("best.pt")
+
+def warmup_model(model):
+    dummy = np.zeros((640, 640, 3), dtype=np.uint8)
+    model(dummy)
+
+warmup_model(model)
 
 uploaded_file = st.file_uploader(
     "Choose an image",
